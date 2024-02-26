@@ -189,4 +189,15 @@ public class CustomerController {
         System.out.println("The following customer was created successfully");
         System.out.println(createdCustomer);
     }
+
+    public void deleteCustomer() {
+        Customer retreivedCustomer = getCustomerById();
+        if(retreivedCustomer != null){
+            dao.deleteCustomerById(retreivedCustomer.getCustomerId());
+            System.out.println("Customer with Id " + retreivedCustomer.getCustomerId() + " deleted successfully.");
+        }
+        else{
+            System.out.println("Customer not found");
+        }
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.umercode.Exception.DaoException;
 import org.umercode.Model.Customer;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,10 @@ public class JdbcCustomerDao implements CustomerDao{
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public JdbcCustomerDao(DataSource dataSource){
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
 
     @Override
     public List<Customer> getCustomers() {
@@ -36,11 +41,8 @@ public class JdbcCustomerDao implements CustomerDao{
                 customers.add(mapRowToCustomer(result));
             }
         }
-        catch (CannotGetJdbcConnectionException e){
-            throw new DaoException("Unable to connect to server or database",e);
-        }
-        catch (DataIntegrityViolationException e){
-            throw new DaoException("Data integrity violation",e);
+        catch (RuntimeException e) {
+            handleException(e);
         }
         return customers;
     }
@@ -58,11 +60,8 @@ public class JdbcCustomerDao implements CustomerDao{
                 customer = mapRowToCustomer(result);
             }
         }
-        catch (CannotGetJdbcConnectionException e){
-            throw new DaoException("Unable to connect to server or database",e);
-        }
-        catch (DataIntegrityViolationException e){
-            throw new DaoException("Data integrity violation",e);
+        catch (RuntimeException e) {
+            handleException(e);
         }
 
         return customer;
@@ -80,11 +79,8 @@ public class JdbcCustomerDao implements CustomerDao{
                customers.add(mapRowToCustomer(result));
             }
         }
-        catch (CannotGetJdbcConnectionException e){
-            throw new DaoException("Unable to connect to server or database",e);
-        }
-        catch (DataIntegrityViolationException e){
-            throw new DaoException("Data integrity violation",e);
+        catch (RuntimeException e) {
+            handleException(e);
         }
 
         return customers;
@@ -102,11 +98,8 @@ public class JdbcCustomerDao implements CustomerDao{
                 customer = mapRowToCustomer(result);
             }
         }
-        catch (CannotGetJdbcConnectionException e){
-            throw new DaoException("Unable to connect to server or database",e);
-        }
-        catch (DataIntegrityViolationException e){
-            throw new DaoException("Data integrity violation",e);
+        catch (RuntimeException e) {
+            handleException(e);
         }
 
         return customer;
@@ -125,11 +118,8 @@ public class JdbcCustomerDao implements CustomerDao{
                 createdCustomer = getCustomerById(newCustomerId);
             }
         }
-        catch (CannotGetJdbcConnectionException e){
-            throw new DaoException("Unable to connect to server or database",e);
-        }
-        catch (DataIntegrityViolationException e){
-            throw new DaoException("Data integrity violation",e);
+        catch (RuntimeException e) {
+            handleException(e);
         }
         return createdCustomer;
     }
@@ -151,11 +141,8 @@ public class JdbcCustomerDao implements CustomerDao{
                 System.out.println("Couldn't update a customer, something went wrong.");
             }
         }
-        catch (CannotGetJdbcConnectionException e){
-            throw new DaoException("Unable to connect to server or database",e);
-        }
-        catch (DataIntegrityViolationException e){
-            throw new DaoException("Data integrity violation",e);
+        catch (RuntimeException e) {
+            handleException(e);
         }
         return updatedCustomer;
     }
@@ -171,17 +158,14 @@ public class JdbcCustomerDao implements CustomerDao{
                 System.out.println("Couldn't update a customer, something went wrong.");
             }
         }
-        catch (CannotGetJdbcConnectionException e){
-            throw new DaoException("Unable to connect to server or database",e);
-        }
-        catch (DataIntegrityViolationException e){
-            throw new DaoException("Data integrity violation",e);
+        catch (RuntimeException e) {
+            handleException(e);
         }
 
         return numberOfRow;
     }
 
-    private Customer mapRowToCustomer(SqlRowSet result) {
+    public Customer mapRowToCustomer(SqlRowSet result) {
         Customer customer = new Customer();
         customer.setCustomerId(result.getInt("customer_id"));
         customer.setName(result.getString("customer_name"));
@@ -192,5 +176,15 @@ public class JdbcCustomerDao implements CustomerDao{
         }
 
         return customer;
+    }
+
+
+    public void handleException(RuntimeException e){
+        if(e instanceof CannotGetJdbcConnectionException){
+            throw new DaoException("Unable to connect to server or database",e);
+        }
+        else if(e instanceof DataIntegrityViolationException){
+            throw new DaoException("Data integrity violation",e);
+        }
     }
 }

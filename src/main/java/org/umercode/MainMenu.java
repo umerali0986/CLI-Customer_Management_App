@@ -18,13 +18,13 @@ public class MainMenu {
 
         boolean running = true;
         while(running){
-
+            System.out.println();
             System.out.println("*** Main Menu ***");
             System.out.println();
             System.out.println("1) View Customer");
             System.out.println("2) Modify Customer");
             System.out.println("3) Add Customer");
-            System.out.println("4) Delete Customer");
+            System.out.println("4) Delete Customer By Id");
             System.out.println("5) Exist");
             System.out.println();
 
@@ -47,10 +47,10 @@ public class MainMenu {
                 handleModifyCustomer();
             }
             else if (selectedOption == 3) {
-                customerController.createCustomer();
+                handleCreateCustomer();
             }
             else if (selectedOption == 4) {
-                // TODO- add implemantation for delete customer
+               handleDeleteCustomer();
             }
             else if (selectedOption == 5) {
                 System.exit(1);
@@ -62,6 +62,8 @@ public class MainMenu {
         }
 
     }
+
+
 
 
 
@@ -147,5 +149,13 @@ public class MainMenu {
                 System.out.println();
             }
         }
+    }
+
+    private void handleCreateCustomer() {
+        customerController.createCustomer();
+    }
+
+    private void handleDeleteCustomer(){
+        customerController.deleteCustomer();
     }
 }
