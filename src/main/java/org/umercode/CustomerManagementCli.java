@@ -1,5 +1,6 @@
 package org.umercode;
 
+import org.umercode.Controller.CustomerController;
 import org.umercode.Dao.JdbcCustomerDao;
 import org.umercode.Model.Customer;
 
@@ -8,7 +9,12 @@ import java.util.List;
 
 public class CustomerManagementCli {
     public static void main(String[] args) {
-        JdbcCustomerDao customerDao = new JdbcCustomerDao();
+
+        MainMenu mainMenu = new MainMenu();
+        mainMenu.run();
+//        JdbcCustomerDao customerDao = new JdbcCustomerDao();
+//        CustomerController customerController = new CustomerController();
+//        customerController.getCustomers();
 //        List<Customer> customers = customerDao.getCustomers();
 //            for(Customer customer : customers){
 //                System.out.println(customer);

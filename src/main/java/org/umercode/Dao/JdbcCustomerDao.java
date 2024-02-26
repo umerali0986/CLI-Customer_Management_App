@@ -93,9 +93,10 @@ public class JdbcCustomerDao implements CustomerDao{
     @Override
     public Customer getCustomerByEmail(String email) {
         Customer customer = null;
-        String sql = "SELECT * FROM customer WHERE email = ?;";
+        String sql = "SELECT * FROM customer WHERE email ILIKE ?;";
 
         try{
+            email = "%" + email + "%";
             SqlRowSet result = jdbcTemplate.queryForRowSet(sql, email);
             if (result.next()){
                 customer = mapRowToCustomer(result);

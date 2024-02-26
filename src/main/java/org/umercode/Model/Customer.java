@@ -65,6 +65,6 @@ public class Customer {
 
     @Override
     public String toString(){
-        return getName() + ", " + getEmail();
+        return  "name = " + getName() + ", email =  " + getEmail() + ", phone =  " + getPhone() + ", birthdate =  " + getBirthdate() + ", Id = " + getCustomerId();
     }
 }
